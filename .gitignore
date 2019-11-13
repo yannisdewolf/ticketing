@@ -1,0 +1,12 @@
+.idea/
+
+target/
+
+
+ticketing-domain/target/
+ticketing-infrastructure/target/
+
+
+
+
+**/*.iml
