@@ -1,0 +1,21 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>all tickets</title>
+    <link rel="stylesheet" th:href="@{/css/ticketstyles.css}">
+</head>
+<body>
+<h1 layout:fragment="header">
+    Alle tickets
+
+</h1>
+<div layout:fragment="content" class="container">
+all tickets
+
+    <div th:each="ticketDTO : ${tickets}" class="box">
+        <div th:text="${ticketDTO.assignedUser}"></div>
+        <div th:text="${ticketDTO.description}"></div>
+    </div>
+
+</div>
+</body>

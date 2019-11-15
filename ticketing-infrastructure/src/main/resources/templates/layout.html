@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Layout</title>
+
+    <link type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css"
+          rel="stylesheet"/>
+
+</head>
+<body>
+<div class="container">
+    <!--navigation-->
+    <h1 layout:fragment="header">Layout</h1>
+
+    <div layout:fragment="content">Some content</div>
+</div>
+</body>
+</html>
