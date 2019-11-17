@@ -1,3 +1,11 @@
 .box {
     border: rebeccapurple dashed thick;
 }
+
+.firstSelected {
+    background-color: green;
+}
+
+.secondSelected {
+    background-color: dodgerblue;
+}

@@ -1,7 +1,6 @@
 package be.dewolf.domain.day;
 
 import lombok.Builder;
-import lombok.Data;
 import lombok.Value;
 
 import java.time.LocalDate;
@@ -14,6 +13,6 @@ public class TicketInfo {
     private String project;
 
     private String assignee;
-    private String description;
+    private String title;
 
 }
