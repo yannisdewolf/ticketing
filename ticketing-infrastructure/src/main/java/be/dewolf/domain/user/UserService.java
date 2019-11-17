@@ -3,8 +3,6 @@ package be.dewolf.domain.user;
 import be.dewolf.domain.user.command.CreateUserCommand;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -26,9 +24,9 @@ public class UserService {
         userRepository.save(user);
 
 
-        if(userCommand.getGroup() != null) {
+        if (userCommand.getGroup() != null) {
             Group foundGroup = groupRepository.findByName(userCommand.getGroup());
-            user.addGroup(foundGroup);
+            //user.addGroup(foundGroup);
         }
 
         return userRepository.save(user);

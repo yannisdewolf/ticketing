@@ -6,8 +6,6 @@ import be.dewolf.domain.user.GroupRepository;
 import be.dewolf.domain.user.UserRepository;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
-
 @Component
 public class TicketService {
 

@@ -3,7 +3,6 @@ package be.dewolf.domain.day;
 import lombok.Value;
 
 import java.time.LocalDate;
-import java.time.MonthDay;
 import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 import java.util.stream.Collectors;

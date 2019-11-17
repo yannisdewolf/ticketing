@@ -6,6 +6,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.StringJoiner;
 
 @Entity
 @Table(name = "groups")
@@ -21,5 +22,11 @@ public class Group implements Serializable {
     @ManyToMany(mappedBy = "groups", fetch = FetchType.LAZY)
     private Set<User> users = new HashSet<>();
 
-
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", Group.class.getSimpleName() + "[", "]")
+                .add("id=" + id)
+                .add("name='" + name + "'")
+                .toString();
+    }
 }

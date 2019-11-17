@@ -1,4 +1,4 @@
-package be.dewolf.controller.ticket;
+package be.dewolf.domain.ticket.controller;
 
 import be.dewolf.domain.ticket.Priority;
 import lombok.Builder;

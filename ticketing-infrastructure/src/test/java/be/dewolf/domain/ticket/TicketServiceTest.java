@@ -3,6 +3,7 @@ package be.dewolf.domain.ticket;
 import be.dewolf.domain.ticket.command.CreateTicketCommand;
 import be.dewolf.domain.user.*;
 import be.dewolf.domain.user.command.CreateUserCommand;
+import org.hibernate.jpa.QueryHints;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +12,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,9 +27,6 @@ public class TicketServiceTest {
 
     @Autowired
     private TicketService ticketService;
-
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     private GroupRepository groupRepository;
@@ -58,34 +54,18 @@ public class TicketServiceTest {
         //em.flush();
         em.clear();
 
-        Ticket foundTicket = em.createQuery("select t from Ticket t " +
+        Ticket foundTicket = em.createQuery("select distinct t from Ticket t " +
                                                     "join fetch t.comments " +
                                                     "join fetch t.user " +
                                                     "where t.id = :id" +
                                                     "", Ticket.class)
                                .setParameter("id", persistedTicket.getId())
+                               .setHint(QueryHints.HINT_PASS_DISTINCT_THROUGH, false)
                                .getSingleResult();
-
-        assertThat(em.createQuery("from User u", User.class)
-                     .getResultList()).hasSize(1);
-        assertThat(em.createQuery("from Group u", Group.class)
-                     .getResultList()).hasSize(1);
-        assertThat(em.createQuery("from Comment u", Comment.class)
-                     .getResultList()).hasSize(1);
-        assertThat(em.createQuery("from Ticket u", Ticket.class)
-                     .getResultList()).hasSize(1);
 
         assertThat(foundTicket).isNotNull();
 
         System.out.println(foundTicket);
-
-
-    }
-
-    @SpringBootApplication
-    @EntityScan(basePackages = {"be.dewolf.domain"})
-    @ComponentScan(basePackages = {"be.dewolf.domain"})
-    static class TestConfiguration {
     }
 
 }

@@ -7,7 +7,6 @@ import lombok.*;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -42,10 +41,12 @@ public class Ticket implements Serializable {
     @Enumerated(EnumType.STRING)
     private Priority priority;
 
-
-
     public void addComment(Comment comment) {
         this.comments.add(comment);
     }
+
+    //public void addComment(Comment comment) {
+    //    this.comments.add(comment);
+    //}
 
 }

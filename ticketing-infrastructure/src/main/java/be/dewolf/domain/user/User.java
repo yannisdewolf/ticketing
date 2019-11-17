@@ -4,8 +4,8 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.StringJoiner;
 
@@ -28,7 +28,8 @@ public class User implements Serializable {
 
 
     public void addGroup(Group e) {
-        this.getGroups().add(e);
+        this.getGroups()
+            .add(e);
     }
 
     @Override
@@ -39,5 +40,22 @@ public class User implements Serializable {
                 .add("lastName='" + lastName + "'")
                 .add("email='" + email + "'")
                 .toString();
+    }
+
+    public String getName() {
+        return String.join(" ", firstName, lastName);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }

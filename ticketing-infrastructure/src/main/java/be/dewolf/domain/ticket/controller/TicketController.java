@@ -1,9 +1,12 @@
-package be.dewolf.controller.ticket;
+package be.dewolf.domain.ticket.controller;
 
+import be.dewolf.controller.user.UserDTO;
 import be.dewolf.domain.day.DayService;
 import be.dewolf.domain.day.DayView;
 import be.dewolf.domain.ticket.Priority;
 import be.dewolf.domain.ticket.command.CreateTicketCommand;
+import be.dewolf.domain.user.User;
+import be.dewolf.domain.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,12 +26,14 @@ import java.util.stream.Collectors;
 public class TicketController {
 
     private DayService dayService;
+    private UserService userService;
 
     private List<TicketDTO> tickets;
 
     @Autowired
-    public TicketController(DayService dayService) {
+    public TicketController(DayService dayService, UserService userService) {
         this.dayService = dayService;
+        this.userService = userService;
         this.tickets = new ArrayList<>();
         TicketDTO ticket1 = TicketDTO.builder()
                                      .assignedUser("yannis de wolf")
@@ -49,6 +54,24 @@ public class TicketController {
 
 
         tickets.addAll(Arrays.asList(ticket1, ticket2));
+    }
+
+    @GetMapping("/create")
+    public ModelAndView createTicket() {
+        ModelAndView model = new ModelAndView("components/ticket/newTicket", "ticket", new CreateTicketCommand());
+        model.addObject("users", userService.findAll()
+                                            .stream()
+                                            .map(this::toDto)
+                                            .collect(Collectors.toList()));
+        return model;
+        //return new ModelAndView("components/ticket/newTicket");
+    }
+
+    private UserDTO toDto(User user) {
+        return UserDTO.builder()
+                      .userId(user.getId())
+                      .userName(user.getName())
+                      .build();
     }
 
     @GetMapping("/dayviews")
