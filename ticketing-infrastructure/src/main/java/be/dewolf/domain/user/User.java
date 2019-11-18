@@ -20,7 +20,7 @@ public class User implements Serializable {
 
     private String firstName, lastName, email;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "user_group",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id", updatable = false, nullable = false),
             inverseJoinColumns = @JoinColumn(name = "group_id", referencedColumnName = "id", updatable = false, nullable = false))

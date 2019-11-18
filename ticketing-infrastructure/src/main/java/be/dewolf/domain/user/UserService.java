@@ -2,6 +2,7 @@ package be.dewolf.domain.user;
 
 import be.dewolf.domain.user.command.CreateUserCommand;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -32,6 +33,14 @@ public class UserService {
         return userRepository.save(user);
 
         //foundGroup.addUser(user);
+    }
+
+    @Transactional
+    public void addGroupToUser(String role, Long user) {
+        User one = this.userRepository.getOne(user);
+        one.getGroups().add(groupRepository.findByName(role));
+        //one.addGroup();
+        userRepository.save(one);
     }
 
     public User getUser(Long id) {
