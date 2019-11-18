@@ -109,7 +109,7 @@ public class TicketController {
             parameters.put("project", calendarFilter.getProject());
         }
 
-        List<DayView> dayViews = dayService.getDayViews(parameters);
+        List<DayView> dayViews = dayService.getDayViews(parameters, calendarFilter);
 
 
         ModelAndView calendarView = new ModelAndView("components/ticket/agenda", "calendarView",

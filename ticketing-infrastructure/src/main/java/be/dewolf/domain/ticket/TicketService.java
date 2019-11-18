@@ -67,29 +67,6 @@ public class TicketService {
         }
 
         return foundInRange;
-
-        //
-        //final Predicate<Ticket> begindatePredicate = parameters.containsKey("begindate") ?
-        //        getPredicate(parameters.get("begindate")) : null;
-        //
-        //final Predicate<Ticket> enddatePredicate = parameters.containsKey("enddate") ?
-        //        getPredicate(parameters.get("enddate")) : null;
-        //
-        //return projectname.stream()
-        //           .filter(ticket -> {
-        //               if (begindatePredicate != null) {
-        //                    return begindatePredicate.test(ticket);
-        //               }
-        //               return true;
-        //           })
-        //           .filter(ticket -> {
-        //               if(enddatePredicate != null) {
-        //                   return enddatePredicate.test(ticket);
-        //               }
-        //               return true;
-        //           })
-        //           .collect(Collectors.toList());
-
     }
 
     private Predicate<Ticket> getPredicate(String begindateVal) {

@@ -2,9 +2,12 @@ package be.dewolf.domain.day;
 
 import be.dewolf.domain.ticket.Ticket;
 import be.dewolf.domain.ticket.TicketService;
+import be.dewolf.domain.ticket.controller.CalendarFilter;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -32,7 +35,9 @@ public class DayService {
                                   .collect(Collectors.toList());
 
         return CalendarView.from(allTicketInfos)
-                           .getDayViews();
+                           .getDayViews(YearMonth.now()
+                                                 .atDay(1), YearMonth.now()
+                                                                     .atEndOfMonth());
 
     }
 
@@ -47,11 +52,15 @@ public class DayService {
                                    .build();
     }
 
-    public List<DayView> getDayViews(Map<String, String> parameters) {
+    public List<DayView> getDayViews(Map<String, String> parameters, CalendarFilter calendarFilter) {
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate begindate = LocalDate.parse(parameters.get("begindate"), dateFormatter);
+        LocalDate enddate = LocalDate.parse(parameters.get("enddate"), dateFormatter);
+
         return CalendarView.from(this.ticketService.getTickets(parameters)
                                             .stream()
                                             .map(ticketToTicketInfo())
                                             .collect(Collectors.toList()))
-                    .getDayViews();
+                    .getDayViews(begindate, enddate);
     }
 }

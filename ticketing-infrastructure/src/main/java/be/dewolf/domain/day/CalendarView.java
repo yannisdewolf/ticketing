@@ -33,7 +33,7 @@ public class CalendarView {
 
     }
 
-    public List<DayView> getDayViews() {
+    public List<DayView> getDayViews(LocalDate from, LocalDate until) {
 
         if (projectTodoListPerDate.isEmpty()) {
             return Collections.emptyList();
@@ -49,10 +49,7 @@ public class CalendarView {
                                                     .get();
 
 
-        LocalDate firstDayToDisplay = lowestDate.with(TemporalAdjusters.firstDayOfMonth());
-        firstDayToDisplay
-                 .datesUntil(firstDayToDisplay.with(highestDate.with(TemporalAdjusters.lastDayOfMonth())))
-                 .forEach(d -> projectTodoListPerDate.putIfAbsent(d, new ProjectTodoList()));
+        from.datesUntil(until.plusDays(1)).forEach(d -> projectTodoListPerDate.putIfAbsent(d, new ProjectTodoList()));
 
         return projectTodoListPerDate.entrySet()
                                      .stream()
