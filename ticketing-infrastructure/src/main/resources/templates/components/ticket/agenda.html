@@ -7,7 +7,7 @@
 </head>
 <body>
 <h1 layout:fragment="header">
-    Alle tickets
+    Board
 </h1>
 <div class="container" layout:fragment="content">
 
@@ -15,34 +15,29 @@
         <h2>Filters</h2>
     </div>
 
-    <form method="get" th:action="@{/ticket/agenda/search}">
+    <form method="post" th:action="@{/ticket/agenda/search}" th:object="${calendarFilter}">
 
         <div class="form-group row">
             <label for="assignedProjectId" class="col-sm-2 col-form-label">Project</label>
             <div class="col-sm-10">
                 <select class="custom-select" id="assignedProjectId"
-                        th:name="project">
+                        th:field="*{project}" >
                     <option value="" >Select Project</option>
                     <option th:each="project : ${projects}" th:text="${project.name}"
-                            th:value="${project.name}"></option>
+                            th:value="${project.name}"
+                            th:selected="${project.name == calendarFilter.project}"
+                    ></option>
                 </select>
             </div>
         </div>
 
-
-<!--        <div class="form-group row">-->
-<!--            <label class="col-sm-2 col-form-label" for="project">Project</label>-->
-<!--            <div class="col-sm-10">-->
-<!--                <input class="form-control" id="project" th:name="project" type="text">-->
-<!--            </div>-->
-<!--        </div>-->
 
         <div class="form-group row">
             <label class="col-sm-2 col-form-label" for="begindate">Begindatum</label>
             <div class="col-sm-10">
                 <input
                         class="form-control" data-date-format="dd/mm/yyyy" id="begindate"
-                        th:name="begindate" type="text">
+                        th:field="*{begindate}" type="text">
             </div>
         </div>
 
@@ -51,7 +46,7 @@
             <div class="col-sm-10">
                 <input
                         class="form-control" data-date-format="dd/mm/yyyy" id="enddate"
-                        th:name="enddate" type="text">
+                         th:field="*{enddate}" type="text">
             </div>
         </div>
 

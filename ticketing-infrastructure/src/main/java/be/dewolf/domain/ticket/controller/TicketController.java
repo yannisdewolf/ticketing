@@ -50,6 +50,7 @@ public class TicketController {
                                                   .map(this::toDto)
                                                   .collect(Collectors.toList()));
 
+
         return model;
         //return new ModelAndView("components/ticket/newTicket");
     }
@@ -88,18 +89,24 @@ public class TicketController {
                                                          .stream()
                                                          .map(this::toDto)
                                                          .collect(Collectors.toList()));
+
+        CalendarFilter calendarFilter = CalendarFilter.builder()
+                                             .begindate("01/11/2019")
+                                             .enddate("30/11/2019")
+                                             .build();
+
+        calendarView.addObject("calendarFilter", calendarFilter );
+
         return calendarView;
     }
 
-    @RequestMapping("/agenda/search")
-    public ModelAndView getTickets(@RequestParam(value = "begindate") String begindate,
-                                   @RequestParam(value = "enddate") String enddate,
-                                   @RequestParam(value = "project", required = false) String project) {
+    @PostMapping("/agenda/search")
+    public ModelAndView getTickets(@ModelAttribute CalendarFilter calendarFilter) {
 
-        Map<String, String> parameters = Maps.newHashMap("begindate", begindate);
-        parameters.put("enddate", enddate);
-        if (!StringUtils.isEmpty(project)) {
-            parameters.put("project", project);
+        Map<String, String> parameters = Maps.newHashMap("begindate", calendarFilter.getBegindate());
+        parameters.put("enddate", calendarFilter.getEnddate());
+        if (!StringUtils.isEmpty(calendarFilter.getProject())) {
+            parameters.put("project", calendarFilter.getProject());
         }
 
         List<DayView> dayViews = dayService.getDayViews(parameters);
@@ -111,6 +118,8 @@ public class TicketController {
                                                          .stream()
                                                          .map(this::toDto)
                                                          .collect(Collectors.toList()));
+
+        calendarView.addObject("calendarFilter", calendarFilter);
         return calendarView;
     }
 
