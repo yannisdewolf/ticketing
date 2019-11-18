@@ -69,10 +69,4 @@ public class TicketService {
         return foundInRange;
     }
 
-    private Predicate<Ticket> getPredicate(String begindateVal) {
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        LocalDate begindate = LocalDate.parse(begindateVal, dateFormatter);
-        return ticket -> ticket.getDeadline()
-                               .isAfter(begindate);
-    }
 }

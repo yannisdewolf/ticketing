@@ -12,56 +12,49 @@
 <div class="container" layout:fragment="content">
 
     <div class="row">
-        <h2>Filters</h2>
-    </div>
+        <div class="col-sm-3">
+            <h2>Filters</h2>
+            <form method="post" th:action="@{/ticket/agenda/search}" th:object="${calendarFilter}">
 
-    <form method="post" th:action="@{/ticket/agenda/search}" th:object="${calendarFilter}">
+                <div class="form-group row">
+                    <label for="assignedProjectId">Project</label>
+                    <select
+                            class="custom-select" id="assignedProjectId"
+                            th:field="*{project}">
+                        <option value="">Select Project</option>
+                        <option
+                                th:each="project : ${projects}" th:selected="${project.name == calendarFilter.project}"
+                                th:text="${project.name}"
+                                th:value="${project.name}"
+                        ></option>
+                    </select>
+                </div>
 
-        <div class="form-group row">
-            <label for="assignedProjectId" class="col-sm-2 col-form-label">Project</label>
-            <div class="col-sm-10">
-                <select class="custom-select" id="assignedProjectId"
-                        th:field="*{project}" >
-                    <option value="" >Select Project</option>
-                    <option th:each="project : ${projects}" th:text="${project.name}"
-                            th:value="${project.name}"
-                            th:selected="${project.name == calendarFilter.project}"
-                    ></option>
-                </select>
-            </div>
+
+                <div class="form-group row">
+                    <label for="begindate">Begindatum</label>
+                        <input
+                                class="form-control" data-date-format="dd/mm/yyyy" id="begindate"
+                                th:field="*{begindate}" type="text">
+                </div>
+
+                <div class="form-group row">
+                    <label for="enddate">Einddatum</label>
+                        <input
+                                class="form-control" data-date-format="dd/mm/yyyy" id="enddate"
+                                th:field="*{enddate}" type="text">
+                </div>
+
+                <input type="submit"/>
+
+            </form>
         </div>
 
 
-        <div class="form-group row">
-            <label class="col-sm-2 col-form-label" for="begindate">Begindatum</label>
-            <div class="col-sm-10">
-                <input
-                        class="form-control" data-date-format="dd/mm/yyyy" id="begindate"
-                        th:field="*{begindate}" type="text">
-            </div>
-        </div>
-
-        <div class="form-group row">
-            <label class="col-sm-2 col-form-label" for="enddate">Einddatum</label>
-            <div class="col-sm-10">
-                <input
-                        class="form-control" data-date-format="dd/mm/yyyy" id="enddate"
-                         th:field="*{enddate}" type="text">
-            </div>
-        </div>
-
-        <input type="submit"/>
-
-    </form>
-
-    <div class="row">
-        <div class="col-2">
-
-
-        </div>
-        <div class="col-10">
-
-            <table border="5">
+<!--        resultlist -->
+        <div class="col-sm-9">
+            <h2>Results</h2>
+            <table class="table">
                 <tr th:each="dayView : ${calendarView}">
                     <td th:text="${dayView.date} "></td>
 
@@ -70,6 +63,7 @@
                 <div
                         class="firstSelected"
                         th:each="ticketInfo : ${dayView.todoPerProject.get('flyer1')}">
+
                     <span th:text="${ticketInfo.title}"></span>
                      -
                     <span th:text="${ticketInfo.assignee}"></span>
@@ -91,10 +85,8 @@
             </table>
 
         </div>
-    </div>
 
-    <!--    elke dag van maand div -->
-    <!--    als dag hetzelfde is: check -->
+    </div>
 
 
 </div>

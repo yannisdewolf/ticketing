@@ -16,15 +16,11 @@ import java.util.stream.Collectors;
 @Service
 public class DayService {
 
-    public static final String PROJECT_1 = "project1";
-    private static final String PROJECT_2 = "project2";
-
     private TicketService ticketService;
 
     public DayService(TicketService ticketService) {
         this.ticketService = ticketService;
     }
-
 
     public List<DayView> getDayViews() {
 
