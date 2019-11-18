@@ -29,3 +29,7 @@ values
 ((select id from users where first_name='James'), (select id from groups where name='marketing')),
 ((select id from users where first_name='Han'), (select id from groups where name='finance')),
 ((select id from users where first_name='Indiana'), (select id from groups where name='hr'));
+
+
+insert into projects(name)
+values ('flyer1'), ('flyer2');

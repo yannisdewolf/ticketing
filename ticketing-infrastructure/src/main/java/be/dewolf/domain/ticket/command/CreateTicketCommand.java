@@ -4,6 +4,7 @@ import be.dewolf.domain.ticket.Priority;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
@@ -12,11 +13,13 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class CreateTicketCommand {
 
-    private LocalDate deadline;
+    private String title;
     private String description;
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private LocalDate deadline;
     private Long assignedUserId;
     private Long assignedGroupId;
-    private String comment;
+    private Long assignedProjectId;
     private Priority priority;
 
 }

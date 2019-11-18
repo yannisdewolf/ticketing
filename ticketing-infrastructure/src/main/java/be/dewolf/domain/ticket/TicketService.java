@@ -1,10 +1,12 @@
 package be.dewolf.domain.ticket;
 
+import be.dewolf.domain.project.ProjectRepository;
 import be.dewolf.domain.ticket.command.CreateTicketCommand;
-import be.dewolf.domain.ticket.command.UpdateTicketCommand;
 import be.dewolf.domain.user.GroupRepository;
 import be.dewolf.domain.user.UserRepository;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class TicketService {
@@ -12,49 +14,38 @@ public class TicketService {
     private TicketRepository ticketRepository;
     private GroupRepository groupRepository;
     private UserRepository userRepository;
+    private ProjectRepository projectRepository;
 
-    public TicketService(TicketRepository ticketRepository, GroupRepository groupRepository, UserRepository userRepository) {
+    public TicketService(TicketRepository ticketRepository, GroupRepository groupRepository, UserRepository userRepository, ProjectRepository projectRepository) {
         this.ticketRepository = ticketRepository;
         this.groupRepository = groupRepository;
         this.userRepository = userRepository;
+        this.projectRepository = projectRepository;
     }
 
-    public void updateTicket(UpdateTicketCommand updateTicketCommand) {
-        Ticket ticket = ticketRepository.getOne(updateTicketCommand.getId());
 
-        Ticket newTicket = new Ticket();
-        if(updateTicketCommand.getAssignedUserId() != null) {
-            newTicket.setUser(userRepository.getOne(updateTicketCommand.getAssignedUserId()));
-        }
-        if(updateTicketCommand.getAssignedGroupId() != null) {
-            newTicket.setAssignedGroup(groupRepository.getOne(updateTicketCommand.getAssignedGroupId()));
-        }
-
-        newTicket.setDeadline(updateTicketCommand.getDeadline());
-        newTicket.setDescription(updateTicketCommand.getDescription());
-        newTicket.setPriority(updateTicketCommand.getPriority());
-    }
 
     public Ticket createTicket(CreateTicketCommand createTicketCommand) {
-        Ticket ticket = new Ticket();
+        Ticket.TicketBuilder builder = Ticket.builder();
         if(createTicketCommand.getAssignedGroupId() != null) {
-            ticket.setAssignedGroup(groupRepository.getOne(createTicketCommand.getAssignedGroupId()));
+            builder.assignedGroup(groupRepository.getOne(createTicketCommand.getAssignedGroupId()));
         }
         if(createTicketCommand.getAssignedUserId() != null) {
-            ticket.setUser(userRepository.getOne(createTicketCommand.getAssignedUserId()));
+            builder.user(userRepository.getOne(createTicketCommand.getAssignedUserId()));
         }
 
-        Comment comment = new Comment();
-        comment.setText(createTicketCommand.getComment());
-        ticket.addComment(comment);
-
-        ticket.setDescription(createTicketCommand.getDescription());
-        ticket.setDeadline(createTicketCommand.getDeadline());
-
-        return ticketRepository.save(ticket);
-
-
+        builder.project(projectRepository.getOne(createTicketCommand.getAssignedProjectId()));
+        builder.title(createTicketCommand.getTitle());
+        builder.description(createTicketCommand.getDescription());
+        builder.deadline(createTicketCommand.getDeadline());
+        builder.priority(createTicketCommand.getPriority());
+        return ticketRepository.save(builder.build());
 
     }
+
+    public List<Ticket> getTickets() {
+        return ticketRepository.findAll();
+    }
+
 
 }

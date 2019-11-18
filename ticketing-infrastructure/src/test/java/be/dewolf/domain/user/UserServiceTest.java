@@ -7,6 +7,9 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.persistence.EntityManager;
@@ -14,8 +17,10 @@ import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
-@DataJpaTest
+//@DataJpaTest
 @SpringBootTest(properties = "")
+@ActiveProfiles("test")
+@Sql("/test-data.sql")
 public class UserServiceTest {
 
     @Autowired
@@ -30,12 +35,12 @@ public class UserServiceTest {
     @Test
     public void createUser() {
         Group s = new Group();
-        s.setName("developers");
+        s.setName("qwerty");
         groupRepository.save(s);
-        userService.createUser(new CreateUserCommand("yannis", "de wolf", "mailadres", "developers"));
+        User user = userService.createUser(new CreateUserCommand("yannis", "de wolf", "mailadres", "developers"));
 
-        List<User> all = userService.findAll();
-        Assertions.assertThat(all).hasSize(1);
+        User all = userService.getUser(user.getId());
+        Assertions.assertThat(all).isNotNull();
 
         //List<User> select_q_from_user_q = em.createQuery("select q from User q join fetch q.groups ", User.class)
         //                                    .getResultList();

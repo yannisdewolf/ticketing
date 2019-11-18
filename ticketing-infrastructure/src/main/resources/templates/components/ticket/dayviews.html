@@ -10,36 +10,50 @@
 
 </h1>
 <div layout:fragment="content" class="container">
-all tickets
+
+    <div class="row">
+        <div class="col-2">
+
+
+
+
+        </div>
+        <div class="col-10">
+
+            <table border="5">
+                <tr th:each="dayView : ${calendarView}" >
+                    <td th:text="${dayView.date} " ></td>
+
+                    <td>
+            <span th:if="${dayView.todoPerProject.containsKey('flyer1')}">
+                <div th:each="ticketInfo : ${dayView.todoPerProject.get('flyer1')}" class="firstSelected">
+                    <span th:text="${ticketInfo.title}"></span>
+                     -
+                    <span th:text="${ticketInfo.assignee}"></span>
+                </div>
+            </span>
+                    </td>
+                    <td>
+             <span th:if="${dayView.todoPerProject.containsKey('flyer2')}" >
+                <div th:each="ticketInfo : ${dayView.todoPerProject.get('flyer2')}" class="secondSelected">
+                    <span th:text="${ticketInfo.title}"></span>
+                     -
+                    <span th:text="${ticketInfo.assignee}"></span>
+                </div>
+            </span>
+                    </td>
+                </tr>
+            </table>
+
+        </div>
+    </div>
 
 <!--    elke dag van maand div -->
 <!--    als dag hetzelfde is: check -->
 
 
 
-<table border="5">
-    <tr th:each="dayView : ${calendarView}" >
-        <td th:text="${dayView.date}" ></td>
-        <td>
-            <span th:if="${dayView.todoPerProject.containsKey('project1')}">
-                <div th:each="ticketInfo : ${dayView.todoPerProject.get('project1')}" class="firstSelected">
-                    <span th:text="${ticketInfo.title}"></span>
-                     -
-                    <span th:text="${ticketInfo.assignee}"></span>
-                </div>
-            </span>
-        </td>
-        <td>
-             <span th:if="${dayView.todoPerProject.containsKey('project2')}" >
-                <div th:each="ticketInfo : ${dayView.todoPerProject.get('project2')}" class="secondSelected">
-                    <span th:text="${ticketInfo.title}"></span>
-                     -
-                    <span th:text="${ticketInfo.assignee}"></span>
-                </div>
-            </span>
-        </td>
-    </tr>
-</table>
+
 
 </div>
 </body>

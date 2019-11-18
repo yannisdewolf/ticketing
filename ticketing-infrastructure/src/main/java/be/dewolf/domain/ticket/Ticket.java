@@ -1,5 +1,6 @@
 package be.dewolf.domain.ticket;
 
+import be.dewolf.domain.project.Project;
 import be.dewolf.domain.user.Group;
 import be.dewolf.domain.user.User;
 import lombok.*;
@@ -12,12 +13,19 @@ import java.util.Set;
 
 @Entity
 @Table(name = "tickets")
-@Data
+//@Value
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class Ticket implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private String title;
 
     private LocalDate deadline;
 
@@ -32,6 +40,8 @@ public class Ticket implements Serializable {
     @JoinColumn(name = "assigned_group")
     private Group assignedGroup;
 
+    @ManyToOne
+    private Project project;
 
     @OneToMany(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "ticket_id")

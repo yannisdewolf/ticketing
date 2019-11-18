@@ -6,6 +6,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Propagation;
@@ -21,6 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 //@SpringBootTest
+@ActiveProfiles("test")
 @DataJpaTest
 //@Transactional(propagation = Propagation.NOT_SUPPORTED)
 public class UserRepositoryTest {
@@ -78,29 +80,29 @@ public class UserRepositoryTest {
                     .collect(Collectors.joining("\r\n")));
     }
 
-    @Test
-    public void initializedData() {
-
-        List<User> userWithMultipleGroups = em.createQuery("select distinct u " +
-                                                       "from User u " +
-                                                       "join fetch u.groups " +
-                                                       "where u.firstName = :firstName", User.class)
-                                  .setParameter("firstName", "maximus")
-                                              .setHint(QueryHints.HINT_PASS_DISTINCT_THROUGH, false)
-                                  .getResultList();
-
-        System.out.println(userWithMultipleGroups);
-
-
-
-        assertThat(userWithMultipleGroups).hasSize(1);
-        assertThat(userWithMultipleGroups.get(0).getGroups())
-                                          .extracting("name")
-                                          .containsOnly("developers",
-                                                        "dba",
-                                                        "marketing",
-                                                        "finance",
-                                                        "hr");
-    }
+    //@Test
+    //public void initializedData() {
+    //
+    //    List<User> userWithMultipleGroups = em.createQuery("select distinct u " +
+    //                                                   "from User u " +
+    //                                                   "join fetch u.groups " +
+    //                                                   "where u.firstName = :firstName", User.class)
+    //                              .setParameter("firstName", "maximus")
+    //                                          .setHint(QueryHints.HINT_PASS_DISTINCT_THROUGH, false)
+    //                              .getResultList();
+    //
+    //    System.out.println(userWithMultipleGroups);
+    //
+    //
+    //
+    //    assertThat(userWithMultipleGroups).hasSize(1);
+    //    assertThat(userWithMultipleGroups.get(0).getGroups())
+    //                                      .extracting("name")
+    //                                      .containsOnly("developers",
+    //                                                    "dba",
+    //                                                    "marketing",
+    //                                                    "finance",
+    //                                                    "hr");
+    //}
 
 }

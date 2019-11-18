@@ -1,9 +1,11 @@
 package be.dewolf.domain.ticket.controller;
 
-import be.dewolf.controller.user.UserDTO;
+import be.dewolf.controller.user.ValueDto;
 import be.dewolf.domain.day.DayService;
 import be.dewolf.domain.day.DayView;
-import be.dewolf.domain.ticket.Priority;
+import be.dewolf.domain.project.Project;
+import be.dewolf.domain.project.ProjectService;
+import be.dewolf.domain.ticket.TicketService;
 import be.dewolf.domain.ticket.command.CreateTicketCommand;
 import be.dewolf.domain.user.User;
 import be.dewolf.domain.user.UserService;
@@ -15,9 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,33 +26,16 @@ public class TicketController {
 
     private DayService dayService;
     private UserService userService;
-
-    private List<TicketDTO> tickets;
+    private TicketService ticketService;
+    private ProjectService projectService;
 
     @Autowired
-    public TicketController(DayService dayService, UserService userService) {
+    public TicketController(DayService dayService, UserService userService, TicketService ticketService, ProjectService projectService) {
         this.dayService = dayService;
         this.userService = userService;
-        this.tickets = new ArrayList<>();
-        TicketDTO ticket1 = TicketDTO.builder()
-                                     .assignedUser("yannis de wolf")
-                                     .description("doe iets")
-                                     .priority(Priority.MEDIUM)
-                                     .deadLine(LocalDate.now()
-                                                        .plusDays(20))
-                                     .project("eerste")
-                                     .build();
 
-        TicketDTO ticket2 = TicketDTO.builder()
-                                     .assignedUser("yannis de wolf")
-                                     .description("doe iets anders")
-                                     .priority(Priority.HIGH)
-                                     .deadLine(LocalDate.now()
-                                                        .plusDays(10))
-                                     .build();
-
-
-        tickets.addAll(Arrays.asList(ticket1, ticket2));
+        this.ticketService = ticketService;
+        this.projectService = projectService;
     }
 
     @GetMapping("/create")
@@ -63,15 +45,24 @@ public class TicketController {
                                             .stream()
                                             .map(this::toDto)
                                             .collect(Collectors.toList()));
+        model.addObject("projects", projectService.getAllProjects().stream().map(this::toDto).collect(Collectors.toList()));
+
         return model;
         //return new ModelAndView("components/ticket/newTicket");
     }
 
-    private UserDTO toDto(User user) {
-        return UserDTO.builder()
-                      .userId(user.getId())
-                      .userName(user.getName())
-                      .build();
+    private ValueDto toDto(Project project) {
+        return ValueDto.builder()
+                       .id(project.getId())
+                       .name(project.getName())
+                       .build();
+    }
+
+    private ValueDto toDto(User user) {
+        return ValueDto.builder()
+                       .id(user.getId())
+                       .name(user.getName())
+                       .build();
     }
 
     @GetMapping("/dayviews")
@@ -88,13 +79,9 @@ public class TicketController {
 
     @PostMapping("/create")
     public ModelAndView createTicket(@ModelAttribute CreateTicketCommand createTicket) {
-        this.tickets.add(TicketDTO.builder()
-                                  .deadLine(createTicket.getDeadline())
-                                  .priority(createTicket.getPriority())
-                                  .assignedUser(createTicket.getAssignedUserId() + "")
-                                  .description(createTicket.getDescription())
-                                  .build());
-        return new ModelAndView("redirect:/ticket/all");
+        System.out.println();
+        ticketService.createTicket(createTicket);
+        return new ModelAndView("redirect:/ticket/dayviews");
     }
 
 }

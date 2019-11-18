@@ -34,6 +34,10 @@ public class UserService {
         //foundGroup.addUser(user);
     }
 
+    public User getUser(Long id) {
+        return userRepository.getOne(id);
+    }
+
     public List<User> findAll() {
         return userRepository.findAll();
     }
