@@ -67,7 +67,6 @@ public class TicketController {
 
     @GetMapping("/dayviews")
     public ModelAndView getTickets() {
-        System.out.println("hello world");
 
         List<DayView> dayViews = dayService.getDayViews();
 

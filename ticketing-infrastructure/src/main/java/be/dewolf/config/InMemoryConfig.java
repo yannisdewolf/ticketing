@@ -11,7 +11,7 @@ import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
 @Configuration
-@Profile("data")
+@Profile("inmemory")
 public class InMemoryConfig {
 	private final String SAMPLE_DATA = "classpath:production-data.sql";
 	
