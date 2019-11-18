@@ -37,7 +37,7 @@ public class UserServiceTest {
         Group s = new Group();
         s.setName("qwerty");
         groupRepository.save(s);
-        User user = userService.createUser(new CreateUserCommand("yannis", "de wolf", "mailadres", "developers"));
+        User user = userService.createUser(new CreateUserCommand("yannis", "de wolf", "mailadres", s.getId()));
 
         User all = userService.getUser(user.getId());
         Assertions.assertThat(all).isNotNull();

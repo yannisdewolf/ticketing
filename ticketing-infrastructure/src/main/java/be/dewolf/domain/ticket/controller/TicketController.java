@@ -1,6 +1,6 @@
 package be.dewolf.domain.ticket.controller;
 
-import be.dewolf.controller.user.ValueDto;
+import be.dewolf.domain.common.ValueDto;
 import be.dewolf.domain.day.DayService;
 import be.dewolf.domain.day.DayView;
 import be.dewolf.domain.project.Project;
@@ -9,6 +9,7 @@ import be.dewolf.domain.ticket.TicketService;
 import be.dewolf.domain.ticket.command.CreateTicketCommand;
 import be.dewolf.domain.user.User;
 import be.dewolf.domain.user.UserService;
+import be.dewolf.domain.user.controller.UserView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -58,20 +59,20 @@ public class TicketController {
                        .build();
     }
 
-    private ValueDto toDto(User user) {
+    private ValueDto toDto(UserView user) {
         return ValueDto.builder()
                        .id(user.getId())
                        .name(user.getName())
                        .build();
     }
 
-    @GetMapping("/dayviews")
+    @GetMapping("/agenda")
     public ModelAndView getTickets() {
 
         List<DayView> dayViews = dayService.getDayViews();
 
 
-        return new ModelAndView("components/ticket/dayviews", "calendarView",
+        return new ModelAndView("components/ticket/agenda", "calendarView",
                                 dayViews);
     }
 
@@ -80,7 +81,7 @@ public class TicketController {
     public ModelAndView createTicket(@ModelAttribute CreateTicketCommand createTicket) {
         System.out.println();
         ticketService.createTicket(createTicket);
-        return new ModelAndView("redirect:/ticket/dayviews");
+        return new ModelAndView("redirect:/ticket/agenda");
     }
 
 }

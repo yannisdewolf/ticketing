@@ -1,10 +1,15 @@
 package be.dewolf.domain.user.command;
 
-import lombok.Value;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Value
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 public class CreateUserCommand {
 
-    private final String firstName, lastName, email, group;
+    private String firstName, lastName, email;
+    private Long group;
 
 }

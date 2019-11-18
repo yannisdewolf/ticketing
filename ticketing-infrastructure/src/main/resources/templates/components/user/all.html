@@ -1,0 +1,41 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>all tickets</title>
+    <link rel="stylesheet" th:href="@{/css/ticketstyles.css}">
+</head>
+<body>
+<h1 layout:fragment="header">
+    All users
+    <div class="dropdown float-right">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Actions
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="newUser.html" th:href="@{/user/create}">Add new</a>
+        </div>
+    </div>
+</h1>
+<div layout:fragment="content" class="container">
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Naam</th>
+                <th>Email</th>
+                <th>Groepen</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="user : ${users}">
+
+                <td> <span th:text="${user.name}"></span></td>
+                <td> <span th:text="${user.email}"></span></td>
+                <td> <span th:text="${user.groups}"></span></td>
+
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+</body>

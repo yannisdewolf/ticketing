@@ -1,10 +1,12 @@
 package be.dewolf.domain.user;
 
 import be.dewolf.domain.user.command.CreateUserCommand;
+import be.dewolf.domain.user.controller.UserView;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -17,6 +19,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
+    @Transactional
     public User createUser(CreateUserCommand userCommand) {
         User user = new User();
         user.setEmail(userCommand.getEmail());
@@ -26,8 +29,8 @@ public class UserService {
 
 
         if (userCommand.getGroup() != null) {
-            Group foundGroup = groupRepository.findByName(userCommand.getGroup());
-            //user.addGroup(foundGroup);
+            Group foundGroup = groupRepository.getOne(userCommand.getGroup());
+            user.addGroup(foundGroup);
         }
 
         return userRepository.save(user);
@@ -38,7 +41,8 @@ public class UserService {
     @Transactional
     public void addGroupToUser(String role, Long user) {
         User one = this.userRepository.getOne(user);
-        one.getGroups().add(groupRepository.findByName(role));
+        one.getGroups()
+           .add(groupRepository.findByName(role));
         //one.addGroup();
         userRepository.save(one);
     }
@@ -47,8 +51,14 @@ public class UserService {
         return userRepository.getOne(id);
     }
 
-    public List<User> findAll() {
-        return userRepository.findAll();
+    public List<UserView> findAll() {
+        return userRepository.findAll()
+                             .stream()
+                             .map(u -> new UserView(u.getId(), u.getName(), u.getEmail(), u.getGroups()
+                                                                                .stream()
+                                                                                .map(Group::getName)
+                                                                                .collect(Collectors.joining(","))))
+                             .collect(Collectors.toList());
     }
 
 }

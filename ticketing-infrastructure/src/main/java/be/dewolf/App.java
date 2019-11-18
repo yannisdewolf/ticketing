@@ -18,7 +18,7 @@ public class App {
 
     @GetMapping("/")
     public ModelAndView home() {
-        return new ModelAndView("redirect:/ticket/dayviews");
+        return new ModelAndView("redirect:/ticket/agenda");
     }
 
 }

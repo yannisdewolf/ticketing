@@ -1,14 +1,13 @@
 package be.dewolf.domain.ticket.command;
 
 import be.dewolf.domain.ticket.Priority;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateTicketCommand {
