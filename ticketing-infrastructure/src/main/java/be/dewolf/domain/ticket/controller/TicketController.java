@@ -7,18 +7,17 @@ import be.dewolf.domain.project.Project;
 import be.dewolf.domain.project.ProjectService;
 import be.dewolf.domain.ticket.TicketService;
 import be.dewolf.domain.ticket.command.CreateTicketCommand;
-import be.dewolf.domain.user.User;
 import be.dewolf.domain.user.UserService;
 import be.dewolf.domain.user.controller.UserView;
+import org.assertj.core.util.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Controller
@@ -46,10 +45,20 @@ public class TicketController {
                                             .stream()
                                             .map(this::toDto)
                                             .collect(Collectors.toList()));
-        model.addObject("projects", projectService.getAllProjects().stream().map(this::toDto).collect(Collectors.toList()));
+        model.addObject("projects", projectService.getAllProjects()
+                                                  .stream()
+                                                  .map(this::toDto)
+                                                  .collect(Collectors.toList()));
 
         return model;
         //return new ModelAndView("components/ticket/newTicket");
+    }
+
+    @PostMapping("/create")
+    public ModelAndView createTicket(@ModelAttribute CreateTicketCommand createTicket) {
+        System.out.println();
+        ticketService.createTicket(createTicket);
+        return new ModelAndView("redirect:/ticket/agenda");
     }
 
     private ValueDto toDto(Project project) {
@@ -69,19 +78,41 @@ public class TicketController {
     @GetMapping("/agenda")
     public ModelAndView getTickets() {
 
+
         List<DayView> dayViews = dayService.getDayViews();
 
 
-        return new ModelAndView("components/ticket/agenda", "calendarView",
-                                dayViews);
+        ModelAndView calendarView = new ModelAndView("components/ticket/agenda", "calendarView",
+                                                     dayViews);
+        calendarView.addObject("projects", projectService.getAllProjects()
+                                                         .stream()
+                                                         .map(this::toDto)
+                                                         .collect(Collectors.toList()));
+        return calendarView;
     }
 
+    @RequestMapping("/agenda/search")
+    public ModelAndView getTickets(@RequestParam(value = "begindate") String begindate,
+                                   @RequestParam(value = "enddate") String enddate,
+                                   @RequestParam(value = "project", required = false) String project) {
 
-    @PostMapping("/create")
-    public ModelAndView createTicket(@ModelAttribute CreateTicketCommand createTicket) {
-        System.out.println();
-        ticketService.createTicket(createTicket);
-        return new ModelAndView("redirect:/ticket/agenda");
+        Map<String, String> parameters = Maps.newHashMap("begindate", begindate);
+        parameters.put("enddate", enddate);
+        if (!StringUtils.isEmpty(project)) {
+            parameters.put("project", project);
+        }
+
+        List<DayView> dayViews = dayService.getDayViews(parameters);
+
+
+        ModelAndView calendarView = new ModelAndView("components/ticket/agenda", "calendarView",
+                                                     dayViews);
+        calendarView.addObject("projects", projectService.getAllProjects()
+                                                         .stream()
+                                                         .map(this::toDto)
+                                                         .collect(Collectors.toList()));
+        return calendarView;
     }
+
 
 }

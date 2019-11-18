@@ -35,7 +35,21 @@ public class CalendarView {
 
     public List<DayView> getDayViews() {
 
-        LocalDate firstDayToDisplay = LocalDate.of(2019, 11, 1);
+        if (projectTodoListPerDate.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        LocalDate lowestDate = projectTodoListPerDate.keySet()
+                                                    .stream()
+                                                    .min(Comparator.naturalOrder())
+                                                    .get();
+        LocalDate highestDate = projectTodoListPerDate.keySet()
+                                                    .stream()
+                                                    .max(Comparator.naturalOrder())
+                                                    .get();
+
+
+        LocalDate firstDayToDisplay = lowestDate.with(TemporalAdjusters.firstDayOfMonth());
         firstDayToDisplay
                  .datesUntil(firstDayToDisplay.with(TemporalAdjusters.firstDayOfNextMonth()))
                  .forEach(d -> projectTodoListPerDate.putIfAbsent(d, new ProjectTodoList()));
