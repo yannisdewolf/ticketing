@@ -51,7 +51,7 @@ public class CalendarView {
 
         LocalDate firstDayToDisplay = lowestDate.with(TemporalAdjusters.firstDayOfMonth());
         firstDayToDisplay
-                 .datesUntil(firstDayToDisplay.with(TemporalAdjusters.firstDayOfNextMonth()))
+                 .datesUntil(firstDayToDisplay.with(highestDate.with(TemporalAdjusters.lastDayOfMonth())))
                  .forEach(d -> projectTodoListPerDate.putIfAbsent(d, new ProjectTodoList()));
 
         return projectTodoListPerDate.entrySet()
