@@ -5,25 +5,33 @@
     <title>all tickets</title>
     <link rel="stylesheet" th:href="@{/css/theme3.css}">
 
+    <script th:src="@{/js/moment-with-locales.min.js}" type="text/javascript"></script>
     <script th:src="@{/js/caleandar2.js}" type="text/javascript"></script>
-    <!--<script type="text/javascript" th:src="@{/js/mycal.js}"></script>-->
 
     <script th:inline="javascript" type="text/javascript">
 
         $(document).ready(function () {
-            alert('hello from agenda');
+
+            /*<![CDATA[*/
+
+            var message = /*[[${begroeting}]]*/ 'default';
+            console.log(message);
+
+            /*]]>*/
 
             var events = [
-                {'Date': new Date(2019, 10, 7), 'Title': 'Doctor appointment at 3:25pm.'},
+                {'Date': new Date(2019, 10, 7), 'Title': 'Doctor appointment at 3:25pm.', 'dateString':'2019-11-07'},
                 {
                     'Date': new Date(2019, 10, 18),
                     'Title': 'New Garfield movie comes out!',
                     'Link': 'https://garfield.com'
+                    , 'dateString':'2019-11-18'
                 },
                 {
                     'Date': new Date(2019, 10, 27),
                     'Title': '25 year anniversary',
                     'Link': 'https://www.google.com.au/#q=anniversary+gifts'
+                    , 'dateString':'2019-11-27'
                 },
             ];
 

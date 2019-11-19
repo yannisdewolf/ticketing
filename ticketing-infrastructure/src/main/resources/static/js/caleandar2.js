@@ -4,6 +4,9 @@
   (◠‿◠✿)
 */
 var Calendar = function(model, options, date){
+
+  console.log('new instance with date ', date)
+
   // Default Values
   this.Options = {
     Color: '',
@@ -25,37 +28,62 @@ var Calendar = function(model, options, date){
   }
 
   model?this.Model=model:this.Model={};
-  this.Today = new Date();
+  this.Today = moment();
 
   this.Selected = this.Today
-  this.Today.Month = this.Today.getMonth();
-  this.Today.Year = this.Today.getFullYear();
+  this.Today.Month = this.Today.month();
+  this.Today.Year = this.Today.year();
   if(date){this.Selected = date}
-  this.Selected.Month = this.Selected.getMonth();
-  this.Selected.Year = this.Selected.getFullYear();
+  this.Selected.Month = this.Selected.month();
+  this.Selected.Year = this.Selected.year();
 
-  this.Selected.Days = new Date(this.Selected.Year, (this.Selected.Month + 1), 0).getDate();
-  this.Selected.FirstDay = new Date(this.Selected.Year, (this.Selected.Month), 1).getDay();
-  this.Selected.LastDay = new Date(this.Selected.Year, (this.Selected.Month + 1), 0).getDay();
+  // this.Selected.Days = new Date(this.Selected.Year, (this.Selected.Month + 1), 0).getDate();
+  this.Selected.Days = this.Selected.daysInMonth();
+  // console.log(this.Selected.Days)
+  // this.Selected.FirstDay = new Date(this.Selected.Year, (this.Selected.Month), 1).getDay();
+  this.Selected.FirstDay = this.Selected.startOf('month');
 
-  this.Prev = new Date(this.Selected.Year, (this.Selected.Month - 1), 1);
-  if(this.Selected.Month==0){this.Prev = new Date(this.Selected.Year-1, 11, 1);}
-  this.Prev.Days = new Date(this.Prev.getFullYear(), (this.Prev.getMonth() + 1), 0).getDate();
+  // this.Selected.LastDay = new Date(this.Selected.Year, (this.Selected.Month + 1), 0).getDay();
+  this.Selected.LastDay = this.Selected.endOf('month');
+  console.log('selected:', this.Selected)
+
+  // this.Prev = new Date(this.Selected.Year, (this.Selected.Month - 1), 1);
+  this.Prev = this.Selected.subtract(1, 'months');
+  console.log('selected.month', this.Selected.Month)
+  if(this.Selected.Month==0){
+    // this.Prev = new Date(this.Selected.Year-1, 11, 1);
+    this.Prev = this.Selected.subtract(1, 'months');
+  }
+  // this.Prev.Days = new Date(this.Prev.getFullYear(), (this.Prev.getMonth() + 1), 0).getDate();
+  this.Prev.Days = this.Prev.daysInMonth();
+
+  console.log(this.Prev)
 };
 
 function createCalendar(calendar, element, adjuster){
+
   if(typeof adjuster !== 'undefined'){
-    var newDate = new Date(calendar.Selected.Year, calendar.Selected.Month + adjuster, 1);
-    calendar = new Calendar(calendar.Model, calendar.Options, newDate);
+
+    console.log('createCalendar with adjuster')
+    var q = moment();
+    q.set('year', calendar.Selected.Year);
+    q.set('month', calendar.Selected.Month);
+    q.set('date', 1);
+
+    // var newDate = new Date(calendar.Selected.Year, calendar.Selected.Month + adjuster, 1);
+    calendar = new Calendar(calendar.Model, calendar.Options, q);
     element.innerHTML = '';
   }else{
+    console.log('createCalendar without adjuster')
     for(var key in calendar.Options){
       typeof calendar.Options[key] != 'function' && typeof calendar.Options[key] != 'object' && calendar.Options[key]?element.className += " " + key + "-" + calendar.Options[key]:0;
     }
   }
   var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    console.log('months defined')
 
   function AddSidebar(){
+    console.log('adding sidebar')
     var sidebar = document.createElement('div');
     sidebar.className += 'cld-sidebar';
 
@@ -205,9 +233,16 @@ function createCalendar(calendar, element, adjuster){
       var number = DayNumber(i+1);
       // Check Date against Event Dates
       for(var n = 0; n < calendar.Model.length; n++){
-        var evDate = calendar.Model[n].Date;
+        // var evDate = calendar.Model[n].Date;
+        // console.log('evDate' + evDate);
+        var evDate = new Date(calendar.Model[n].dateString);
+        // console.log('evDateString' + evDate);
         var toDate = new Date(calendar.Selected.Year, calendar.Selected.Month, (i+1));
+        // console.log('evdate: ' + evDate + ' toDate: ' + toDate);
+        // console.log('evdate: ' + evDate.getTime() + ' toDate: ' + toDate.getTime());
+
         if(evDate.getTime() == toDate.getTime()){
+          console.log('matching day!')
           number.className += " eventday";
           var title = document.createElement('span');
           title.className += "cld-title";
