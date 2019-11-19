@@ -10,9 +10,6 @@ var Calendar = function (model, options, date) {
         Color: '',
         LinkColor: '',
         NavShow: true,
-        NavVertical: false,
-        NavLocation: '',
-        DateTimeShow: true,
         DateTimeFormat: 'mmm, yyyy',
         DatetimeLocation: '',
         EventClick: '',
@@ -32,139 +29,67 @@ var Calendar = function (model, options, date) {
     } else {
         this.Selected = this.Today.clone();
     }
+    this.FirstDayOfSelectedMonth = this.Selected.clone();
+    this.FirstDayOfSelectedMonth.set('day', 1);
+
+
+
     this.Selected.LastDay = this.Selected.endOf('month');
     this.cloneOfToday = this.Today.clone();
     this.Prev = this.cloneOfToday.subtract(1, 'months');
 
 };
 
+function getFirstDayOfSelectedMonth(calendar) {
+    return calendar.FirstDayOfSelectedMonth.clone();
+}
+
 function createCalendar(calendar, element, adjuster) {
 
     if (typeof adjuster !== 'undefined') {
-        var q = moment();
-        q.set('year', calendar.Selected.year());
-        q.set('month', calendar.Selected.month());
-        q.set('date', 1);
+        var firstDayOfSelectedMonth = getFirstDayOfSelectedMonth(calendar);
+        // q.set('year', calendar.Selected.year());
+        // q.set('month', calendar.Selected.month());
+        // q.set('date', 1);
 
-        q.add('month', adjuster);
+        firstDayOfSelectedMonth.add('month', adjuster);
 
-        calendar = new Calendar(calendar.Model, calendar.Options, q);
+        calendar = new Calendar(calendar.Model, calendar.Options, firstDayOfSelectedMonth);
         element.innerHTML = '';
     } else {
         for (var key in calendar.Options) {
             typeof calendar.Options[key] != 'function' && typeof calendar.Options[key] != 'object' && calendar.Options[key] ? element.className += " " + key + "-" + calendar.Options[key] : 0;
         }
     }
-    var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-
-    function AddSidebar() {
-        var sidebar = document.createElement('div');
-        sidebar.className += 'cld-sidebar';
-
-        var monthList = document.createElement('ul');
-        monthList.className += 'cld-monthList';
-
-        for (var i = 0; i < months.length - 3; i++) {
-            var x = document.createElement('li');
-            x.className += 'cld-month';
-            var n = i - (4 - calendar.Selected.get('month'));
-            // Account for overflowing month values
-            if (n < 0) {
-                n += 12;
-            } else if (n > 11) {
-                n -= 12;
-            }
-            // Add Appropriate Class
-            if (i == 0) {
-                x.className += ' cld-rwd cld-nav';
-                x.addEventListener('click', function () {
-                    typeof calendar.Options.ModelChange == 'function' ? calendar.Model = calendar.Options.ModelChange() : calendar.Model = calendar.Options.ModelChange;
-                    createCalendar(calendar, element, -1);
-                });
-                x.innerHTML += '<svg height="15" width="15" viewBox="0 0 100 75" fill="rgba(255,255,255,0.5)"><polyline points="0,75 100,75 50,0"></polyline></svg>';
-            } else if (i == months.length - 4) {
-                x.className += ' cld-fwd cld-nav';
-                x.addEventListener('click', function () {
-                    typeof calendar.Options.ModelChange == 'function' ? calendar.Model = calendar.Options.ModelChange() : calendar.Model = calendar.Options.ModelChange;
-                    createCalendar(calendar, element, 1);
-                });
-                x.innerHTML += '<svg height="15" width="15" viewBox="0 0 100 75" fill="rgba(255,255,255,0.5)"><polyline points="0,0 100,0 50,75"></polyline></svg>';
-            } else {
-                if (i < 4) {
-                    x.className += ' cld-pre';
-                } else if (i > 4) {
-                    x.className += ' cld-post';
-                } else {
-                    x.className += ' cld-curr';
-                }
-
-                //prevent losing var adj value (for whatever reason that is happening)
-                (function () {
-                    var adj = (i - 4);
-                    x.addEventListener('click', function () {
-                        typeof calendar.Options.ModelChange == 'function' ? calendar.Model = calendar.Options.ModelChange() : calendar.Model = calendar.Options.ModelChange;
-                        createCalendar(calendar, element, adj);
-                    });
-                    x.setAttribute('style', 'opacity:' + (1 - Math.abs(adj) / 4));
-                    x.innerHTML += months[n].substr(0, 3);
-                }()); // immediate invocation
-
-                if (n == 0) {
-                    var y = document.createElement('li');
-                    y.className += 'cld-year';
-                    if (i < 5) {
-                        y.innerHTML += calendar.Selected.get('year');
-                    } else {
-                        y.innerHTML += calendar.Selected.get('year') + 1;
-                    }
-                    monthList.appendChild(y);
-                }
-            }
-            monthList.appendChild(x);
-        }
-        sidebar.appendChild(monthList);
-        if (calendar.Options.NavLocation) {
-            document.getElementById(calendar.Options.NavLocation).innerHTML = "";
-            document.getElementById(calendar.Options.NavLocation).appendChild(sidebar);
-        } else {
-            element.appendChild(sidebar);
-        }
-    }
-
     var mainSection = document.createElement('div');
     mainSection.className += "cld-main";
 
-    function AddDateTime() {
-        var datetime = document.createElement('div');
-        datetime.className += "cld-datetime";
-        if (calendar.Options.NavShow && !calendar.Options.NavVertical) {
-            var rwd = document.createElement('div');
-            rwd.className += " cld-rwd cld-nav";
-            rwd.addEventListener('click', function () {
+    function addNavigation() {
+        var navigation = document.createElement('div');
+        navigation.className += "cld-datetime";
+        if (calendar.Options.NavShow) {
+            var previousMonth = document.createElement('div');
+            previousMonth.className += " cld-rwd cld-nav";
+            previousMonth.addEventListener('click', function () {
                 createCalendar(calendar, element, -1);
             });
-            rwd.innerHTML = '<svg height="15" width="15" viewBox="0 0 75 100" fill="rgba(0,0,0,0.5)"><polyline points="0,50 75,0 75,100"></polyline></svg>';
-            datetime.appendChild(rwd);
+            previousMonth.innerHTML = '<svg height="15" width="15" viewBox="0 0 75 100" fill="rgba(0,0,0,0.5)"><polyline points="0,50 75,0 75,100"></polyline></svg>';
+            navigation.appendChild(previousMonth);
         }
         var today = document.createElement('div');
         today.className += ' today';
         today.innerHTML = calendar.Selected.format('MMMM') + ", " + calendar.Selected.format('YYYY');
-        datetime.appendChild(today);
-        if (calendar.Options.NavShow && !calendar.Options.NavVertical) {
-            var fwd = document.createElement('div');
-            fwd.className += " cld-fwd cld-nav";
-            fwd.addEventListener('click', function () {
+        navigation.appendChild(today);
+        if (calendar.Options.NavShow) {
+            var nextMonth = document.createElement('div');
+            nextMonth.className += " cld-fwd cld-nav";
+            nextMonth.addEventListener('click', function () {
                 createCalendar(calendar, element, 1);
             });
-            fwd.innerHTML = '<svg height="15" width="15" viewBox="0 0 75 100" fill="rgba(0,0,0,0.5)"><polyline points="0,0 75,50 0,100"></polyline></svg>';
-            datetime.appendChild(fwd);
+            nextMonth.innerHTML = '<svg height="15" width="15" viewBox="0 0 75 100" fill="rgba(0,0,0,0.5)"><polyline points="0,0 75,50 0,100"></polyline></svg>';
+            navigation.appendChild(nextMonth);
         }
-        if (calendar.Options.DatetimeLocation) {
-            document.getElementById(calendar.Options.DatetimeLocation).innerHTML = "";
-            document.getElementById(calendar.Options.DatetimeLocation).appendChild(datetime);
-        } else {
-            mainSection.appendChild(datetime);
-        }
+        mainSection.appendChild(navigation);
     }
 
     function AddLabels() {
@@ -270,7 +195,7 @@ function createCalendar(calendar, element, adjuster) {
                         }
                         title.appendChild(a);
                     } else {
-                        title.innerHTML += '<a href="' + calendar.Model[elementIndex].Link + '">' + calendar.Model[elementIndex].title + '</a>';
+                        title.innerHTML += calendar.Model[elementIndex].title;
                     }
                     number.appendChild(title);
                 }
@@ -327,11 +252,8 @@ function createCalendar(calendar, element, adjuster) {
     }
     element.appendChild(mainSection);
 
-    if (calendar.Options.NavShow && calendar.Options.NavVertical) {
-        AddSidebar();
-    }
-    if (calendar.Options.DateTimeShow) {
-        AddDateTime();
+    if (calendar.Options.NavShow) {
+        addNavigation();
     }
     AddLabels();
     AddDays();
