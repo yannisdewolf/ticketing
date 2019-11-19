@@ -29,61 +29,48 @@ var Calendar = function(model, options, date){
 
   model?this.Model=model:this.Model={};
   this.Today = moment();
-
-  this.Selected = this.Today
-  this.Today.Month = this.Today.month();
-  this.Today.Year = this.Today.year();
-  if(date){this.Selected = date}
-  this.Selected.Month = this.Selected.month();
-  this.Selected.Year = this.Selected.year();
-
-  // this.Selected.Days = new Date(this.Selected.Year, (this.Selected.Month + 1), 0).getDate();
-  this.Selected.Days = this.Selected.daysInMonth();
-  // console.log(this.Selected.Days)
-  // this.Selected.FirstDay = new Date(this.Selected.Year, (this.Selected.Month), 1).getDay();
-  this.Selected.FirstDay = this.Selected.startOf('month');
-
-  // this.Selected.LastDay = new Date(this.Selected.Year, (this.Selected.Month + 1), 0).getDay();
-  this.Selected.LastDay = this.Selected.endOf('month');
-  console.log('selected:', this.Selected)
-
-  // this.Prev = new Date(this.Selected.Year, (this.Selected.Month - 1), 1);
-  this.Prev = this.Selected.subtract(1, 'months');
-  console.log('selected.month', this.Selected.Month)
-  if(this.Selected.Month==0){
-    // this.Prev = new Date(this.Selected.Year-1, 11, 1);
-    this.Prev = this.Selected.subtract(1, 'months');
+  if(date) {
+    this.Selected = date;
+  } else {
+    this.Selected = this.Today.clone();
   }
-  // this.Prev.Days = new Date(this.Prev.getFullYear(), (this.Prev.getMonth() + 1), 0).getDate();
-  this.Prev.Days = this.Prev.daysInMonth();
+  this.Selected.LastDay = this.Selected.endOf('month');
+  this.cloneOfToday = this.Today.clone();
+  this.Prev = this.cloneOfToday.subtract(1, 'months');
 
-  console.log(this.Prev)
+  console.log('today:',this.Today.format('YYYY-MM-DD'))
+  console.log('selected:',this.Selected.format('YYYY-MM-DD'))
+  console.log('prev:',this.Prev.format('YYYY-MM-DD'))
 };
 
 function createCalendar(calendar, element, adjuster){
 
   if(typeof adjuster !== 'undefined'){
 
-    console.log('createCalendar with adjuster')
+    // console.log('createCalendar with adjuster')
     var q = moment();
-    q.set('year', calendar.Selected.Year);
-    q.set('month', calendar.Selected.Month);
+    q.set('year', calendar.Selected.year());
+    q.set('month', calendar.Selected.month());
     q.set('date', 1);
+
+    q.add('month', adjuster);
+
+    console.log('with adjuster ', q.format('YYYY-MM-DD'));
 
     // var newDate = new Date(calendar.Selected.Year, calendar.Selected.Month + adjuster, 1);
     calendar = new Calendar(calendar.Model, calendar.Options, q);
     element.innerHTML = '';
   }else{
-    console.log('createCalendar without adjuster')
+    // console.log('createCalendar without adjuster')
     for(var key in calendar.Options){
       typeof calendar.Options[key] != 'function' && typeof calendar.Options[key] != 'object' && calendar.Options[key]?element.className += " " + key + "-" + calendar.Options[key]:0;
     }
   }
   var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-    console.log('months defined')
+    // console.log('months defined')
 
   function AddSidebar(){
-    console.log('adding sidebar')
+    // console.log('adding sidebar')
     var sidebar = document.createElement('div');
     sidebar.className += 'cld-sidebar';
 
@@ -93,7 +80,7 @@ function createCalendar(calendar, element, adjuster){
     for(var i = 0; i < months.length - 3; i++){
       var x = document.createElement('li');
       x.className += 'cld-month';
-      var n = i - (4 - calendar.Selected.Month);
+      var n = i - (4 - calendar.Selected.get('month'));
       // Account for overflowing month values
       if(n<0){n+=12;}
       else if(n>11){n-=12;}
@@ -132,9 +119,9 @@ function createCalendar(calendar, element, adjuster){
           var y = document.createElement('li');
           y.className += 'cld-year';
           if(i<5){
-            y.innerHTML += calendar.Selected.Year;
+            y.innerHTML += calendar.Selected.get('year');
           }else{
-            y.innerHTML += calendar.Selected.Year + 1;
+            y.innerHTML += calendar.Selected.get('year') + 1;
           }
           monthList.appendChild(y);
         }
@@ -164,7 +151,7 @@ function createCalendar(calendar, element, adjuster){
       }
       var today = document.createElement('div');
       today.className += ' today';
-      today.innerHTML = months[calendar.Selected.Month] + ", " + calendar.Selected.Year;
+      today.innerHTML = calendar.Selected.format('MMMM') + ", " + calendar.Selected.format('YYYY');
       datetime.appendChild(today);
       if(calendar.Options.NavShow && !calendar.Options.NavVertical){
         var fwd = document.createElement('div');
@@ -203,7 +190,8 @@ function createCalendar(calendar, element, adjuster){
     var days = document.createElement('ul');
     days.className += "cld-days";
     // Previous Month's Days
-    for(var i = 0; i < (calendar.Selected.FirstDay); i++){
+    var dayNumberOfFirstDayOfCurrentMonth = calendar.Selected.startOf('month').get('day');
+    for(var i = 0; i < dayNumberOfFirstDayOfCurrentMonth; i++){
       var day = document.createElement('li');
       day.className += "cld-day prevMonth";
       //Disabled Days
@@ -214,17 +202,19 @@ function createCalendar(calendar, element, adjuster){
         }
       }
 
-      var number = DayNumber((calendar.Prev.Days - calendar.Selected.FirstDay) + (i+1));
+      // var number = DayNumber((dayNumberOfFirstDayOfCurrentMonth - calendar.Selected.startOf('month').get('')) + (i+1));
+      var number = DayNumber('');
       day.appendChild(number);
 
       days.appendChild(day);
     }
     // Current Month's Days
-    for(var i = 0; i < calendar.Selected.Days; i++){
+    for(var i = 0; i < calendar.Selected.daysInMonth(); i++){
       var day = document.createElement('li');
       day.className += "cld-day currMonth";
       //Disabled Days
-      var d = (i + calendar.Selected.FirstDay)%7;
+      // var d = (i + calendar.Selected.FirstDay)%7;
+      var d = (i + 1)%7;
       for(var q = 0; q < calendar.Options.DisabledDays.length; q++){
         if(d==calendar.Options.DisabledDays[q]){
           day.className += " disableDay";
@@ -235,14 +225,23 @@ function createCalendar(calendar, element, adjuster){
       for(var n = 0; n < calendar.Model.length; n++){
         // var evDate = calendar.Model[n].Date;
         // console.log('evDate' + evDate);
-        var evDate = new Date(calendar.Model[n].dateString);
-        // console.log('evDateString' + evDate);
-        var toDate = new Date(calendar.Selected.Year, calendar.Selected.Month, (i+1));
+        // var evDate = new Date(calendar.Model[n].dateString);
+        var evDate = moment(calendar.Model[n].dateString);
+        console.log('evDate' + evDate.format('YYYY-MM-DD'));
+        // var toDate = new Date(calendar.Selected.Year, calendar.Selected.Month, (i+1));
+        var moment1 = moment();
+        moment1.set('year', calendar.Selected.get('year'));
+        moment1.set('month', calendar.Selected.get('month'));
+        moment1.set('date', i+1);
+
+        console.log('handling day to check if event', moment1.format('YYYY-MM-DD'))
+
         // console.log('evdate: ' + evDate + ' toDate: ' + toDate);
         // console.log('evdate: ' + evDate.getTime() + ' toDate: ' + toDate.getTime());
 
-        if(evDate.getTime() == toDate.getTime()){
-          console.log('matching day!')
+        // if(evDate.getTime() == toDate.getTime()){
+        if(evDate.isSame(moment1, 'day')){
+          console.log('matching day!');
           number.className += " eventday";
           var title = document.createElement('span');
           title.className += "cld-title";
@@ -281,7 +280,12 @@ function createCalendar(calendar, element, adjuster){
       }
       day.appendChild(number);
       // If Today..
-      if((i+1) == calendar.Today.getDate() && calendar.Selected.Month == calendar.Today.Month && calendar.Selected.Year == calendar.Today.Year){
+      // if((i+1) == calendar.Today.getDate() && calendar.Selected.Month == calendar.Today.Month && calendar.Selected.Year == calendar.Today.Year){
+      var iPlusOne = i + 1;
+      var dayNumberOfToday = calendar.Today.get('date');
+      var currentlyHandlingToday = iPlusOne === dayNumberOfToday;
+      var selectedDayIsToday = calendar.Selected.isSame(calendar.Today, 'day');
+      if(currentlyHandlingToday && selectedDayIsToday){
         day.className += " today";
       }
       days.appendChild(day);
