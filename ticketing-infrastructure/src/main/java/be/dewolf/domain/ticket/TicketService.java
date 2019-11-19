@@ -49,6 +49,10 @@ public class TicketService {
 
     }
 
+    public List<Ticket> allTickets() {
+        return ticketRepository.findAll();
+    }
+
     public List<Ticket> getTickets(YearMonth yearMonth) {
         return ticketRepository.getByDeadlineBetween(yearMonth.atDay(1), yearMonth.atEndOfMonth());
     }

@@ -1,28 +1,35 @@
 package be.dewolf.domain.agenda;
 
+import be.dewolf.domain.ticket.TicketService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
+import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/agenda")
 public class AgendaController {
 
+    private TicketService ticketService;
+
+    public AgendaController(TicketService ticketService) {
+        this.ticketService = ticketService;
+    }
+
     @GetMapping
     public ModelAndView getTickets() {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-        List<CalendarItem> calendarItems = Arrays.asList(
-                new CalendarItem("2019-11-01T00:00:00Z", "allerheiligen"),
-                new CalendarItem("2019-11-02T00:00:00Z", "allerzielen"),
-                new CalendarItem("2019-11-11T00:00:00Z", "wapenstilstand"),
-                new CalendarItem("2019-12-06T00:00:00Z", "sinterklaas"),
-                new CalendarItem("2019-12-25T00:00:00Z", "kerstmis")
-        );
+        List<CalendarItem> calendarItems = this.ticketService.allTickets().stream()
+        .map(ticket -> {
+            return new CalendarItem(dateTimeFormatter.format(ticket.getDeadline()), ticket.getTitle());
+        }).collect(Collectors.toList());
 
         ModelAndView modelAndView = new ModelAndView("components/agenda/agenda", "begroeting", "hello world!");
         modelAndView.addObject("calendarItems", calendarItems);

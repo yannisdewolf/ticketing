@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CalendarItem {
 
-    private String date, actie;
+    private String dateString, Title;
 
 }
