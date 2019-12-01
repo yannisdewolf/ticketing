@@ -183,10 +183,17 @@ function createCalendar(calendar, element, adjuster) {
     function AddDays() {
         // Create Number Element
         function DayNumber(n) {
-            var number = document.createElement('p');
+            var wrapper = document.createElement('div');
+            wrapper.className = "wrapper";
+
+            var number = document.createElement('div');
             number.className += "cld-number";
+            number.className += " marked";
             number.innerHTML += n;
-            return number;
+
+
+            wrapper.appendChild(number);
+            return wrapper;
         }
 
         var days = document.createElement('ul');

@@ -3,6 +3,8 @@ package be.dewolf.domain.ticket.controller;
 import be.dewolf.domain.common.ValueDto;
 import be.dewolf.domain.day.DayService;
 import be.dewolf.domain.day.DayView;
+import be.dewolf.domain.flyer.CreateFlyerCommand;
+import be.dewolf.domain.flyer.FlyerService;
 import be.dewolf.domain.project.Project;
 import be.dewolf.domain.project.ProjectService;
 import be.dewolf.domain.ticket.TicketService;
@@ -29,14 +31,20 @@ public class TicketController {
     private TicketService ticketService;
     private ProjectService projectService;
 
+    private FlyerService flyerService;
+
     @Autowired
-    public TicketController(DayService dayService, UserService userService, TicketService ticketService, ProjectService projectService) {
+    public TicketController(DayService dayService, UserService userService, TicketService ticketService, ProjectService projectService, FlyerService flyerService) {
         this.dayService = dayService;
         this.userService = userService;
 
         this.ticketService = ticketService;
         this.projectService = projectService;
+        this.flyerService = flyerService;
     }
+
+
+
 
     @GetMapping("/create")
     public ModelAndView createTicket() {

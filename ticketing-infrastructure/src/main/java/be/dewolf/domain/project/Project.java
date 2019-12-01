@@ -1,5 +1,6 @@
 package be.dewolf.domain.project;
 
+import be.dewolf.domain.common.ValueDto;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -14,5 +15,12 @@ public class Project {
     private Long id;
 
     private String name;
+
+    public ValueDto toDto() {
+        return ValueDto.builder()
+                       .id(getId())
+                       .name(getName())
+                       .build();
+    }
 
 }

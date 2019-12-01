@@ -30,7 +30,6 @@ public class TicketService {
         this.projectRepository = projectRepository;
     }
 
-
     public Ticket createTicket(CreateTicketCommand createTicketCommand) {
         Ticket.TicketBuilder builder = Ticket.builder();
         if (createTicketCommand.getAssignedGroupId() != null) {

@@ -1,0 +1,50 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>all tickets</title>
+    <link rel="stylesheet" th:href="@{/css/ticketstyles.css}">
+</head>
+<body>
+<h1 layout:fragment="header">
+    All tickets
+</h1>
+<div layout:fragment="content" class="container">
+
+        <!--        resultlist -->
+<!--        <div class="col-sm-9">-->
+<!--            <h2>Results</h2>-->
+<!--            <table class="table">-->
+<!--                <tr th:each="dayView : ${ticket}">-->
+<!--                    <td th:text="${dayView.date} "></td>-->
+
+<!--                    <td>-->
+<!--            <span th:if="${dayView.todoPerProject.containsKey('flyer1')}">-->
+<!--                <div-->
+<!--                        class="firstSelected"-->
+<!--                        th:each="ticketInfo : ${dayView.todoPerProject.get('flyer1')}">-->
+
+<!--                    <span th:text="${ticketInfo.title}"></span>-->
+<!--                     - -->
+<!--                    <span th:text="${ticketInfo.assignee}"></span>-->
+<!--                </div>-->
+<!--            </span>-->
+<!--                    </td>-->
+<!--                    <td>-->
+<!--             <span th:if="${dayView.todoPerProject.containsKey('flyer2')}">-->
+<!--                <div-->
+<!--                        class="secondSelected"-->
+<!--                        th:each="ticketInfo : ${dayView.todoPerProject.get('flyer2')}">-->
+<!--                    <span th:text="${ticketInfo.title}"></span>-->
+<!--                     - -->
+<!--                    <span th:text="${ticketInfo.assignee}"></span>-->
+<!--                </div>-->
+<!--            </span>-->
+<!--                    </td>-->
+<!--                </tr>-->
+<!--            </table>-->
+
+<!--        </div>-->
+
+
+</div>
+</body>

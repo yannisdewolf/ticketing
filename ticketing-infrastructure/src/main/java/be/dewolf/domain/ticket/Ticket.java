@@ -19,6 +19,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
 public class Ticket implements Serializable {
 
     @Id
@@ -45,6 +46,7 @@ public class Ticket implements Serializable {
 
     @OneToMany(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "ticket_id")
+    @Builder.Default
     private Set<Comment> comments = new HashSet<>();
 
     @Column(name = "priority")
