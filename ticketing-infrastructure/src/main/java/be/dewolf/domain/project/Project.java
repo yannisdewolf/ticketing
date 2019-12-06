@@ -16,6 +16,8 @@ public class Project {
 
     private String name;
 
+    private String color;
+
     public ValueDto toDto() {
         return ValueDto.builder()
                        .id(getId())

@@ -162,6 +162,7 @@ function createCalendar(calendar, element, adjuster) {
                     number.className += " eventday";
                     var title = document.createElement('span');
                     title.className += "cld-title";
+                    title.style = 'background: ' + calendar.Model[elementIndex].color;
                     if (typeof calendar.Model[elementIndex].Link == 'function' || calendar.Options.EventClick) {
                         var a = document.createElement('a');
                         a.setAttribute('href', '#');
@@ -225,7 +226,7 @@ function createCalendar(calendar, element, adjuster) {
     }
 
     if (calendar.Options.Color) {
-        mainSection.innerHTML += '<style>.cld-main{color:' + calendar.Options.Color + ';}</style>';
+        mainSection.innerHTML += '<style>.cld-main {color:' + calendar.Options.Color + ';}</style>';
     }
     if (calendar.Options.LinkColor) {
         mainSection.innerHTML += '<style>.cld-title a{color:' + calendar.Options.LinkColor + ';}</style>';

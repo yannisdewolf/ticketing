@@ -31,5 +31,5 @@ values
 ((select id from users where first_name='Indiana'), (select id from groups where name='hr'));
 
 
-insert into projects(name)
-values ('flyer1'), ('flyer2');
+insert into projects(name, color)
+values ('flyer1', '#2d2c2b'), ('flyer2', '#82506a');

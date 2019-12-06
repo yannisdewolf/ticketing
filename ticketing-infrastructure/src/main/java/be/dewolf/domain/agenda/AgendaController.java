@@ -28,7 +28,7 @@ public class AgendaController {
 
         List<CalendarItem> calendarItems = this.ticketService.allTickets().stream()
         .map(ticket -> {
-            return new CalendarItem(dateTimeFormatter.format(ticket.getDeadline()), ticket.getTitle());
+            return new CalendarItem(dateTimeFormatter.format(ticket.getDeadline()), ticket.getTitle(), ticket.getProject().getColor());
         }).collect(Collectors.toList());
 
         ModelAndView modelAndView = new ModelAndView("components/agenda/agenda", "begroeting", "hello world!");

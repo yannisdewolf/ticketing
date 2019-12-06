@@ -2,7 +2,7 @@
       layout:decorate="~{layout}">
 <head>
     <title>all tickets</title>
-    <link rel="stylesheet" th:href="@{/css/ticketstyles.css}">
+<!--    <link rel="stylesheet" th:href="@{/css/ticketstyles.css}">-->
 </head>
 <body>
 <h1 layout:fragment="header">
@@ -10,71 +10,55 @@
 </h1>
 <div layout:fragment="content">
 
-    <form th:action="@{/ticket/create}" th:object="${ticket}" class="form-horizontal" method="post">
 
-        <div class="form-group row">
-            <label for="title" class="col-sm-2 col-form-label">Titel</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control" id="title" th:field="*{title}">
-            </div>
+    <form th:action="@{/ticket/create}" th:object="${ticket}" method="post">
+
+        <div class="form-element">
+            <label for="title">Titel</label>
+            <input type="text" id="title" th:field="*{title}">
         </div>
 
-        <div class="form-group row">
-            <label for="description" class="col-sm-2 col-form-label">Omschrijving</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control" id="description" th:field="*{description}">
-            </div>
+        <div class="form-element">
+            <label for="description">Omschrijving</label>
+            <input type="text" id="description" th:field="*{description}">
         </div>
 
-        <div class="form-group row">
-            <label for="deadline" class="col-sm-2 col-form-label">Deadline</label>
-            <div class="col-sm-10">
-
-                <input type="text" class="form-control" data-date-format="dd/mm/yyyy" id="deadline" th:field="*{deadline}">
-
-            </div>
+        <div class="form-element">
+            <label for="deadline">Deadline</label>
+            <input type="text" data-date-format="dd/mm/yyyy" id="deadline" th:field="*{deadline}">
         </div>
 
-        <div class="form-group row">
-            <label for="assignedUserId" class="col-sm-2 col-form-label">Assigned user</label>
-            <div class="col-sm-10">
-                <select class="custom-select" id="assignedUserId"
-                        th:field="${ticket.assignedUserId}">
-                    <option value="0">Select User</option>
-                    <option th:each="user : ${users}" th:text="${user.name}"
-                            th:value="${user.id}"></option>
-                </select>
-            </div>
+        <div class="form-element">
+            <label for="assignedUserId">Assigned user</label>
+            <select id="assignedUserId" th:field="${ticket.assignedUserId}">
+                <option value="0">Select User</option>
+                <option th:each="user : ${users}" th:text="${user.name}" th:value="${user.id}"></option>
+            </select>
         </div>
 
-        <div class="form-group row">
-            <label for="assignedProjectId" class="col-sm-2 col-form-label">Selected project</label>
-            <div class="col-sm-10">
-                <select class="custom-select" id="assignedProjectId"
-                        th:field="${ticket.assignedProjectId}">
-                    <option value="0">Select Project</option>
-                    <option th:each="project : ${projects}" th:text="${project.name}"
-                            th:value="${project.id}"></option>
-                </select>
-            </div>
+        <div class="form-element">
+            <label for="assignedProjectId">Selected project</label>
+            <select id="assignedProjectId" th:field="${ticket.assignedProjectId}">
+                <option value="0">Select Project</option>
+                <option th:each="project : ${projects}" th:text="${project.name}" th:value="${project.id}">
+                </option>
+            </select>
         </div>
 
-        <div class="form-group row">
-            <label for="priority" class="col-sm-2 col-form-label">Prioriteit</label>
-            <div class="col-sm-10">
-                <select class="custom-select" id="priority"
-                        th:field="${ticket.priority}">
-                    <option value="0">--Prioriteit--</option>
-                    <option th:text="HIGH" th:value="HIGH"></option>
-                    <option th:text="MEDIUM" th:value="MEDIUM"></option>
-                    <option th:text="LOW" th:value="LOW"></option>
-                </select>
-            </div>
+        <div class="form-element">
+            <label for="priority">Prioriteit</label>
+            <select id="priority" th:field="${ticket.priority}">
+                <option value="0">--Prioriteit--</option>
+                <option th:text="HIGH" th:value="HIGH"></option>
+                <option th:text="MEDIUM" th:value="MEDIUM"></option>
+                <option th:text="LOW" th:value="LOW"></option>
+            </select>
         </div>
 
-        <div class="form-group row">
-            <div class="form-actions col-sm-offset-2 col-sm-10">
-                <input type="submit" class="btn btn-primary" value="Post">
+        <div class="form-element">
+            <div class="empty"></div>
+            <div class="pull-right">
+                <input type="submit" value="Creëer ticket">
             </div>
         </div>
 
