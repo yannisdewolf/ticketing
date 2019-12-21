@@ -10,6 +10,40 @@
             rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/ticketstyles.css}">
 
+
+    <style>
+        .navigation {
+            background-color: #456990;
+            position:fixed;
+            width: 100%;
+            height: 50px;
+            left: 0;
+            top: 0;
+            padding: 15px;
+        }
+
+        .navigation a {
+            color: white;
+        }
+
+        .navigation a:active {
+            color: white;
+        }
+
+        .maincontent {
+             margin-top: 50px;
+        }
+
+        .fragment-title {
+            position: fixed;
+            background-image: linear-gradient(rgb(69,105,144), white);
+            width: 100%;
+            margin: 0;
+            left: 0;
+            box-shadow: 0 4px 2px -2px rgba(69,105,144, .5);
+        }
+    </style>
+
 </head>
 <body>
     <div class="navigation">
@@ -20,8 +54,8 @@
         <div class="menu-item"><a href="components/flyer/init.html" th:href="@{/flyer/init}" class="nav-link">New Flyer</a></div>
     </div>
 
-    <div style="flex-direction: row">
-        <h1 layout:fragment="header">Layout</h1>
+    <div class="maincontent">
+        <h1 layout:fragment="header" class="fragment-title">Layout</h1>
         <div layout:fragment="content">Some content</div>
     </div>
 

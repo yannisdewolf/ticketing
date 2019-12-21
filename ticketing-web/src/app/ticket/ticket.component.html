@@ -1,0 +1,67 @@
+<h1 class="fragment-title">
+  Create ticket
+</h1>
+
+<div class="container">
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+    <div class="form-element">
+      <label for="title" class="required">Titel</label>
+      <input class="form-input" type="text" id="title" formControlName="title">
+    </div>
+
+    <div class="form-element">
+      <label for="description" class="label-textarea required">Omschrijving</label>
+      <textarea id="description" formControlName="omschrijving" cols="30" rows="10"> </textarea>
+    </div>
+
+    <div class="form-element">
+      <label for="deadline" class="required">Deadline</label>
+      <input type="date" id="deadline" formControlName="deadline">
+    </div>
+
+    <div class="form-element">
+      <label for="assignedUser" class="required">User</label>
+
+      <select id="assignedUser" formControlName="assignedUser">
+        <option value="">...</option>
+        <option *ngFor="let p of users" value="{{p.id}}">{{p.name}}</option>
+      </select>
+
+    </div>
+
+    <div class="form-element">
+      <label for="project">Project</label>
+      <select id="project" formControlName="project">
+        <option value="">...</option>
+        <option *ngFor="let p of projects" value="{{p.id}}">{{p.name}}</option>
+      </select>
+    </div>
+
+    <div class="form-element">
+      <label for="group">Group</label>
+      <input type="text" id="group" formControlName="group">
+    </div>
+
+    <div class="form-element">
+      <label for="priority" class="required">Prioriteit</label>
+      <select  id="priority" formControlName="priority">
+        <option value="">...</option>
+        <option *ngFor="let priority of priorities" value="{{priority}}">{{priority}}</option>
+
+<!--        <option value="HIGH">Hoog</option>-->
+<!--        <option value="MEDIUM">Middel</option>-->
+<!--        <option value="LOW">Laag</option>-->
+      </select>
+    </div>
+
+    <input type="submit" [disabled]="!form.valid">
+
+  </form>
+
+
+
+</div>
+
+

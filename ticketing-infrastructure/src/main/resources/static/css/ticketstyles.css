@@ -17,7 +17,8 @@ body {
 }
 
 .container {
-    margin: 1rem;
+    /*margin: 1rem;*/
+    padding-top: 3rem;
 }
 
 .navigation {
@@ -54,6 +55,14 @@ input:not([type="submit"]) {
     flex: 2;
     height: 1.5rem;
     font-size: 1.1rem;
+}
+
+textarea {
+    flex: 2;
+}
+
+.label-textarea {
+    align-items: normal;
 }
 
 input[type="submit"] {

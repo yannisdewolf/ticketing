@@ -8,19 +8,20 @@
 <h1 layout:fragment="header">
     Create ticket
 </h1>
-<div layout:fragment="content">
+<div layout:fragment="content" class="container">
 
 
     <form th:action="@{/ticket/create}" th:object="${ticket}" method="post">
 
         <div class="form-element">
             <label for="title">Titel</label>
-            <input type="text" id="title" th:field="*{title}">
+            <input type="textA" id="title" th:field="*{title}">
         </div>
 
         <div class="form-element">
-            <label for="description">Omschrijving</label>
-            <input type="text" id="description" th:field="*{description}">
+            <label for="description" class="label-textarea">Omschrijving</label>
+            <textarea name="" id="description" cols="30" rows="10" th:fieldd="*{description}"></textarea>
+<!--            <input type="text" id="description" th:field="*{description}">-->
         </div>
 
         <div class="form-element">

@@ -1,0 +1,56 @@
+html, body {
+
+  font-family: 'Source Sans Pro', sans-serif;
+  margin: 0;
+  height: 100%;
+}
+
+.navigation {
+  background-color: #456990;
+  position:fixed;
+  width: 100%;
+  left: 0;
+  top: 0;
+  padding: 15px;
+  display: flex;
+  flex-direction: row;
+}
+
+.menu-item {
+  margin-right: 1rem;
+  font-size: larger;
+}
+
+.menu-item > a {
+  text-decoration: none;
+}
+
+.navigation a {
+  color: white;
+}
+
+.navigation a:active {
+  color: white;
+}
+
+.maincontent {
+  margin-top: 50px;
+  height: 100%;
+}
+
+.container {
+  /*margin: 1rem;*/
+  padding-top: 3rem;
+  height: 100%;
+}
+
+.fragment-title {
+  position: fixed;
+  background-image: linear-gradient(rgb(69,105,144), white);
+  width: 100%;
+  margin: 0;
+  left: 0;
+  box-shadow: 0 4px 2px -2px rgba(69,105,144, .5);
+}
+
+
